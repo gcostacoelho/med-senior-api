@@ -1,9 +1,14 @@
+import * as dotenv from 'dotenv'
+
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './Modules/app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
+    dotenv.config();
+
     const app = await NestFactory.create(AppModule);
+    app.enableCors();
 
     const configSwagger = new DocumentBuilder()
         .setTitle('MedSenior - API')
