@@ -1,8 +1,9 @@
-/*
-https://docs.nestjs.com/controllers#controllers
-*/
-
 import { Controller } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+import { IdosoService } from 'src/Services/idoso.service';
 
-@Controller()
-export class IdosoController {}
+@ApiTags('Idoso')
+@Controller('idoso')
+export class IdosoController {
+    constructor(private readonly idosoService: IdosoService) { }
+}

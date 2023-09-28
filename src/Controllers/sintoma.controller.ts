@@ -1,8 +1,9 @@
-/*
-https://docs.nestjs.com/controllers#controllers
-*/
-
 import { Controller } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+import { SintomaService } from 'src/Services/sintoma.service';
 
-@Controller()
-export class SintomaController {}
+@ApiTags('Sintoma')
+@Controller('sintoma')
+export class SintomaController {
+    constructor(private readonly sintomaService: SintomaService) { }
+}

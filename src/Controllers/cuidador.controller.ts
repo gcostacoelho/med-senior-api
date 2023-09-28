@@ -1,4 +1,9 @@
 import { Controller } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+import { CuidadorService } from 'src/Services/cuidador.service';
 
-@Controller()
-export class CuidadorController {}
+@ApiTags('Cuidador')
+@Controller('cuidador')
+export class CuidadorController {
+    constructor(private readonly cuidadorService: CuidadorService) { }
+}

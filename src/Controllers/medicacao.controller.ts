@@ -1,8 +1,9 @@
-/*
-https://docs.nestjs.com/controllers#controllers
-*/
-
 import { Controller } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+import { MedicacaoService } from 'src/Services/medicacao.service';
 
-@Controller()
-export class MedicacaoController { }
+@ApiTags('Medicacao')
+@Controller('medicacao')
+export class MedicacaoController {
+    constructor(private readonly medicacaoService: MedicacaoService) { }
+}

@@ -1,8 +1,9 @@
-/*
-https://docs.nestjs.com/controllers#controllers
-*/
-
 import { Controller } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+import { ConsultaService } from 'src/Services/consulta.service';
 
-@Controller()
-export class ConsultaController {}
+@ApiTags('Consulta')
+@Controller('consulta')
+export class ConsultaController {
+    constructor(private readonly consultaService: ConsultaService) { }
+}
