@@ -13,6 +13,11 @@ export class MedicacaoService implements Crud {
     Read(id: string): Promise<HttpResponse> {
         throw new Error('Method not implemented.');
     }
+
+    ReadAllMedicines(id: string): Promise<HttpResponse> {
+        throw new Error('Method not implemented.');
+    }
+
     Update(data: Object, id: string): Promise<HttpResponse> {
         throw new Error('Method not implemented.');
     }
