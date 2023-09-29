@@ -1,16 +1,115 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
 }
 
-model teste {
-    id String @id
-    teste String 
+model Idoso {
+    id       String   @id @default(uuid())
+    Nome     String
+    Telefone String
+    Codigo   String   @unique
+    DataNasc DateTime
+    Doencas  String[]
+
+    Cuidador                Cuidador[]
+    login                   Login[]
+    DadosNotificacaoUsuario DadosNotificacaoUsuario[]
+    Consulta                Consulta[]
+    Medicacao               Medicacao[]
+    Sintoma                 Sintoma[]
+}
+
+model Cuidador {
+    id          String   @id @default(uuid())
+    Nome        String
+    Telefone    String
+    DataNasc    DateTime
+    codigoIdoso String
+
+    login                   Login[]
+    DadosNotificacaoUsuario DadosNotificacaoUsuario[]
+
+    codigo Idoso @relation(fields: [codigoIdoso], references: [Codigo])
+}
+
+model DadosNotificacaoUsuario {
+    id String @id @default(uuid())
+
+    fcmUrl String
+    auth   String
+    token  String
+
+    Idoso   Idoso?  @relation(fields: [idosoId], references: [id])
+    idosoId String?
+
+    Cuidador   Cuidador? @relation(fields: [cuidadorId], references: [id])
+    cuidadorId String?
+}
+
+model Login {
+    id String @id @default(uuid())
+
+    emailUsuario String
+    senhaUsuario String
+
+    Idoso   Idoso?  @relation(fields: [idosoId], references: [id])
+    idosoId String?
+
+    Cuidador   Cuidador? @relation(fields: [cuidadorId], references: [id])
+    cuidadorId String?
+}
+
+model Consulta {
+    id String @id @default(uuid())
+
+    dataConsulta  DateTime @db.Date
+    horaConsulta  DateTime @db.Time()
+    local         String
+    especialidade String
+    medico        String
+    documentos    String
+
+    Idoso   Idoso?  @relation(fields: [idosoId], references: [id])
+    idosoId String?
+}
+
+model Medicacao {
+    id String @id @default(uuid())
+
+    nome      String
+    modoAdm   String
+    descricao String
+    estoque   Int
+    falhas    DateTime[]
+
+    UsoMedicacao UsoMedicacao[]
+
+    Idoso   Idoso?  @relation(fields: [idosoId], references: [id])
+    idosoId String?
+}
+
+model UsoMedicacao {
+    id String @id @default(uuid())
+
+    dosagem     Float
+    intervalo   Int
+    horaInicial DateTime
+    dataFinal   DateTime @db.Date
+
+    medicacao Medicacao @relation(fields: [medId], references: [id])
+    medId     String
+}
+
+model Sintoma {
+    id String @id @default(uuid())
+
+    descricao  String
+    ocorrencia DateTime[]
+
+    Idoso   Idoso?  @relation(fields: [idosoId], references: [id])
+    idosoId String?
 }
