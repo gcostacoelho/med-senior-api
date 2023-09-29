@@ -2,10 +2,7 @@ import { ApiProperty } from "@nestjs/swagger";
 
 export class ConsultaDto {
     @ApiProperty()
-    dataConsulta: string
-
-    @ApiProperty()
-    horaConsulta: string
+    dataHoraConsulta: Date
 
     @ApiProperty()
     local: string

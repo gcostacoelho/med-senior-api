@@ -66,8 +66,7 @@ model Login {
 model Consulta {
     id String @id @default(uuid())
 
-    dataConsulta  DateTime @db.Date
-    horaConsulta  DateTime @db.Time()
+    dataHoraConsulta  DateTime
     local         String
     especialidade String
     medico        String

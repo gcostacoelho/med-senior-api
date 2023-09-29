@@ -19,4 +19,8 @@ export class MedicacaoService implements Crud {
     Delete(id: string): Promise<HttpResponse> {
         throw new Error('Method not implemented.');
     }
+
+    AumentarEstoque(id: string, qtd: number): Promise<HttpResponse>{
+        throw new Error('Method not implemented.');
+    }
 }
