@@ -1,18 +1,18 @@
 import { ApiProperty } from "@nestjs/swagger";
 
-export class MedicacaoDto {
+export class UsoMedicacaoDto {
     @ApiProperty()
-    nome: string
+    dosagem: number
 
     @ApiProperty()
-    modoAdm: string
+    intervalo: number
 
     @ApiProperty()
-    descricao: string
+    horaInicial: Date
 
     @ApiProperty()
-    estoque: number
+    dataFinal: Date
 
     @ApiProperty()
-    falhas: Array<Date>
+    medId: string
 }

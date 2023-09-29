@@ -11,7 +11,7 @@ model Idoso {
     id       String   @id @default(uuid())
     Nome     String
     Telefone String
-    Codigo   String   @unique
+    Codigo   String   @unique // Gerado pela aplicação
     DataNasc DateTime
     Doencas  String[]
 
