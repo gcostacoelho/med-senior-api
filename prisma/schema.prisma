@@ -82,13 +82,13 @@ model Medicacao {
     nome      String
     modoAdm   String
     descricao String
-    estoque   Int
+    estoque   Int?
     falhas    DateTime[]
 
     UsoMedicacao UsoMedicacao[]
 
-    Idoso   Idoso?  @relation(fields: [idosoId], references: [id])
-    idosoId String?
+    Idoso   Idoso?  @relation(fields: [idosoCodigo], references: [Codigo])
+    idosoCodigo String?
 }
 
 model UsoMedicacao {
