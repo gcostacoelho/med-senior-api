@@ -23,7 +23,7 @@ export class MedicacaoController {
         return res.status(data.statusCode).json(data.body);
     }
 
-    @Get(':usuarioId')
+    @Get('/todos/:usuarioId')
     @ApiResponse({ status: 200, type: [MedicacaoDto] })
     async lerTodasMedicacoes(@Param('usuarioId') usuario: string, @Res() res: Response) {
         const data = await this.medicacaoService.ReadAllMedicines(usuario);
@@ -33,7 +33,7 @@ export class MedicacaoController {
 
     @Get(':medicacaoId')
     @ApiResponse({ status: 200, type: MedicacaoDto })
-    async lerMedicacao(@Param('medicacao') medicacao: string, @Res() res: Response) {
+    async lerMedicacao(@Param('medicacaoId') medicacao: string, @Res() res: Response) {
         const data = await this.medicacaoService.Read(medicacao);
 
         return res.status(data.statusCode).json(data.body);
