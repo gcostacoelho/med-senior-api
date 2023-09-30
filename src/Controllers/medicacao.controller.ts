@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Res } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Response } from "express";
 import { MedicacaoDto } from 'src/Models/Medicacao/MedicacaoDto';
 import { UsoMedicacaoDto } from 'src/Models/UsoMedicacao/UsoMedicacaoDto';
@@ -7,11 +7,16 @@ import { MedicacaoService } from 'src/Services/medicacao.service';
 
 @ApiTags('Medicacao')
 @Controller('medicacao')
+@ApiBearerAuth()
+@ApiResponse({status: 401, description: 'Não autorizado'})
+@ApiResponse({ status: 400, description: 'Informacão ou informações inválidas, por favor verifique' })
+@ApiResponse({ status: 500, description: 'Erro no servidor' })
 export class MedicacaoController {
     constructor(private readonly medicacaoService: MedicacaoService) { }
 
     //#region  Medicacao
     @Post()
+    @ApiResponse({ status: 201, type: MedicacaoDto })
     async novaMedicacao(@Body() body: MedicacaoDto, @Res() res: Response) {
         const data = await this.medicacaoService.Create(body);
 
@@ -19,6 +24,7 @@ export class MedicacaoController {
     }
 
     @Get(':usuarioId')
+    @ApiResponse({ status: 200, type: [MedicacaoDto] })
     async lerTodasMedicacoes(@Param('usuarioId') usuario: string, @Res() res: Response) {
         const data = await this.medicacaoService.ReadAllMedicines(usuario);
 
@@ -26,6 +32,7 @@ export class MedicacaoController {
     }
 
     @Get(':medicacaoId')
+    @ApiResponse({ status: 200, type: MedicacaoDto })
     async lerMedicacao(@Param('medicacao') medicacao: string, @Res() res: Response) {
         const data = await this.medicacaoService.Read(medicacao);
 
@@ -33,6 +40,7 @@ export class MedicacaoController {
     }
 
     @Patch(':medicacaoId/:qtdMedicacao')
+    @ApiResponse({ status: 200, type: MedicacaoDto })
     async aumentarEstoque(@Param('medicacaoId') medicacao: string, @Param('qtdMedicacao') qtd: number, @Res() res: Response) {
         const data = await this.medicacaoService.AumentarEstoque(medicacao, qtd);
 
@@ -40,6 +48,7 @@ export class MedicacaoController {
     }
 
     @Put(':medicacaoId')
+    @ApiResponse({ status: 200, type: MedicacaoDto })
     async atualizarMedicacao(@Param('medicacaoId') medicacao: string, @Body() body: MedicacaoDto, @Res() res: Response) {
         const data = await this.medicacaoService.Update(body, medicacao);
 
@@ -47,6 +56,7 @@ export class MedicacaoController {
     }
 
     @Delete(':medicacaoId')
+    @ApiResponse({ status: 204, description: 'No content' })
     async deletarMedicacao(@Param('medicacaoId') medicacao: string, @Res() res: Response) {
         const data = await this.medicacaoService.Delete(medicacao);
 
@@ -58,26 +68,31 @@ export class MedicacaoController {
     //#region UsoMedicacao
 
     @Post('uso')
+    @ApiResponse({ status: 201, type: UsoMedicacaoDto })
     async novoUsoMed(@Body() usoMed: UsoMedicacaoDto, @Res() response: Response) {
 
     }
 
     @Get('uso/:idUso')
+    @ApiResponse({ status: 200, type: UsoMedicacaoDto })
     async usoMed(@Param('idUso') id: string, @Res() res: Response) {
 
     }
 
     @Patch('uso/:idUso/:qtd')
+    @ApiResponse({ status: 200, type: MedicacaoDto })
     async tomarRemedio(@Param('idUso') id: string, @Param('qtd') qtd: number, @Res() res: Response) {
 
     }
 
     @Put('/uso/:idUso')
+    @ApiResponse({ status: 200, type: UsoMedicacaoDto })    
     async atualizarUSoMedicamento(@Body() body: UsoMedicacaoDto, @Param('idUso') id: string, @Res() res: Response) {
 
     }
 
     @Delete('uso/:idUso')
+    @ApiResponse({ status: 204, description: 'No Content' })
     async apagarUso(@Param('idUso') id: string, @Res() res: Response) {
 
     }

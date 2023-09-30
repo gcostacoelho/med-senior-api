@@ -14,6 +14,7 @@ async function bootstrap() {
         .setTitle('MedSenior - API')
         .setDescription('MedSenior')
         .setVersion('1.0.0')
+        .addBearerAuth()
         .addTag('Cuidador', 'Endpoints para a criação das funcionalidades que envolvem o cuidador')
         .addTag('Idoso', 'Endpoints para a criação das funcionalidades que envolvem o idoso')
         .addTag('Medicacao', 'Endpoints para a criação das funcionalidades que envolvem os medicamentos')

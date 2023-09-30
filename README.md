@@ -29,6 +29,8 @@
 ## Installation
 
 ```bash
+$ npm -g i yarn
+
 $ yarn install
 ```
 
