@@ -15,7 +15,7 @@ export class IdosoController {
     constructor(private readonly idosoService: IdosoService) { }
 
     @Post()
-    @ApiResponse({ status: 201, type: IdosoDto })
+    @ApiResponse({ status: 201, type: IdosoDtoWithoutPass })
     async novoIdoso(@Body() body: IdosoDto, @Res() res: Response) {
         const data = await this.idosoService.Create(body);
 
@@ -23,7 +23,7 @@ export class IdosoController {
     }
 
     @Get(':email')
-    @ApiResponse({ status: 200, type: IdosoDto })
+    @ApiResponse({ status: 200, type: IdosoDtoWithoutPass })
     async lerIdoso(@Param('email') usuario: string, @Res() res: Response) {
         const data = await this.idosoService.Read(usuario);
 
