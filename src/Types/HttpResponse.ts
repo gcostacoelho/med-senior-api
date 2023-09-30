@@ -23,6 +23,11 @@ export const unauthorized = (): HttpResponse => ({
     body: 'Unauthorized',
 });
 
+export const noContent = (): HttpResponse => ({
+    statusCode: 204,
+    body: 'No Content',
+});
+
 export const notFound = (errorMessage: any): HttpResponse => ({
     statusCode: 404,
     body: errorMessage,

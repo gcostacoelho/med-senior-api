@@ -30,7 +30,6 @@ export class MedicacaoService implements Crud {
             console.error(error);
             return serviceError(error);
         }
-
     }
 
     async Read(id: string): Promise<HttpResponse> {
@@ -48,15 +47,70 @@ export class MedicacaoService implements Crud {
         }
     }
 
-    ReadAllMedicines(id: string): Promise<HttpResponse> {
-        throw new Error('Method not implemented.');
+    async ReadAllMedicines(id: string): Promise<HttpResponse> {
+        try{
+            const medicacao = await this.prisma.medicacao.findMany({
+                where: {
+                    idosoCodigo: id
+                }
+            });
+
+            return success(medicacao);
+        }catch (error) {
+            console.error(error);
+            return serviceError(error);
+        }
     }
 
-    Update(data: Object, id: string): Promise<HttpResponse> {
-        throw new Error('Method not implemented.');
+    async Update(data: MedicacaoDto, id: string): Promise<HttpResponse> {
+        try{
+            const {statusCode, body} = await this.Read(id);
+
+            if (statusCode == 200){
+                const { nome, modoAdm, descricao} = data; // Desestruturação dos elementos\
+
+                const medicaoAtulizado = await this.prisma.medicacao.update({
+                    data: {
+                        nome: nome,
+                        modoAdm: modoAdm,
+                        descricao: descricao,
+                    },
+                    where: {
+                        id
+                    }
+                });
+
+                return success(medicaoAtulizado);
+            }else{
+                return badRequest();
+            }
+
+        }catch (error) {
+            console.error(error);
+            return serviceError(error);
+        }
     }
-    Delete(id: string): Promise<HttpResponse> {
-        throw new Error('Method not implemented.');
+
+    async Delete(id: string): Promise<HttpResponse> {
+        try{
+            const {statusCode, body} = await this.Read(id);
+
+            if (statusCode == 200){
+                const medicaoDeletada = await this.prisma.medicacao.delete({
+                    where: {
+                        id
+                    }
+                });
+
+                return success(medicaoDeletada);
+            }else{
+                return badRequest();
+            }
+
+        }catch (error) {
+            console.error(error);
+            return serviceError(error);
+        }
     }
 
     AumentarEstoque(id: string, qtd: number): Promise<HttpResponse>{
