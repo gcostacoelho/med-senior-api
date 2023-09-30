@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 
-export class IdosoDto {
+export class IdosoDtoWithoutPass {
     @ApiProperty()
     nome: string
 
@@ -8,7 +8,10 @@ export class IdosoDto {
     telefone: string
 
     @ApiProperty()
-    dataNasc: string
+    dataNasc: Date
+
+    @ApiProperty()
+    email: string
 
     @ApiProperty()
     doencas: Array<string>

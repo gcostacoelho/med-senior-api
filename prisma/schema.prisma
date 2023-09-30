@@ -53,7 +53,7 @@ model DadosNotificacaoUsuario {
 model Login {
     id String @id @default(uuid())
 
-    emailUsuario String
+    emailUsuario String @unique
     senhaUsuario String
 
     Idoso   Idoso?  @relation(fields: [idosoId], references: [id])

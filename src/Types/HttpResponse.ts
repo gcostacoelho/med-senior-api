@@ -13,14 +13,19 @@ export const created = (data: any): HttpResponse => ({
     body: data,
 });
 
-export const badRequest = (errorMessage: any): HttpResponse => ({
+export const badRequest = (): HttpResponse => ({
     statusCode: 400,
-    body: errorMessage,
+    body: 'Informacão ou informações inválidas, por favor verifique',
 });
 
 export const unauthorized = (): HttpResponse => ({
     statusCode: 401,
     body: 'Unauthorized',
+});
+
+export const noContent = (): HttpResponse => ({
+    statusCode: 204,
+    body: 'No Content',
 });
 
 export const notFound = (errorMessage: any): HttpResponse => ({
