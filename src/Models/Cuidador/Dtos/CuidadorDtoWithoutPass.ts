@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 
-export class CuidadorDto {
+export class CuidadorDtoWithoutPass {
     @ApiProperty()
     nome: string
 
@@ -12,4 +12,7 @@ export class CuidadorDto {
 
     @ApiProperty()
     codigoIdoso: string
+
+    @ApiProperty()
+    email: string
 }

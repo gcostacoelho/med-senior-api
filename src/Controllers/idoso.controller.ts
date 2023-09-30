@@ -1,7 +1,8 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Res } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Response } from "express";
-import { IdosoDto } from 'src/Models/Idoso/IdosoDto';
+import { IdosoDto } from 'src/Models/Idoso/Dtos/IdosoDto';
+import { IdosoDtoWithoutPass } from 'src/Models/Idoso/Dtos/IdosoDtoWithoutPass';
 import { IdosoService } from 'src/Services/idoso.service';
 
 @ApiTags('Idoso')
@@ -14,32 +15,32 @@ export class IdosoController {
     constructor(private readonly idosoService: IdosoService) { }
 
     @Post()
-    @ApiResponse({ status: 201, type: IdosoDto })
+    @ApiResponse({ status: 201, type: IdosoDtoWithoutPass })
     async novoIdoso(@Body() body: IdosoDto, @Res() res: Response) {
         const data = await this.idosoService.Create(body);
 
         return res.status(data.statusCode).json(data.body);
     }
 
-    @Get(':usuarioId')
-    @ApiResponse({ status: 200, type: IdosoDto })
-    async lerIdoso(@Param('usuario') usuario: string, @Res() res: Response) {
+    @Get(':email')
+    @ApiResponse({ status: 200, type: IdosoDtoWithoutPass })
+    async lerIdoso(@Param('email') usuario: string, @Res() res: Response) {
         const data = await this.idosoService.Read(usuario);
 
         return res.status(data.statusCode).json(data.body);
     }
 
-    @Put(':usuarioId')
-    @ApiResponse({ status: 200, type: IdosoDto })
-    async atualizarIdoso(@Param('usuarioId') usuario: string, @Body() body: IdosoDto, @Res() res: Response) {
+    @Put(':email')
+    @ApiResponse({ status: 200, type: IdosoDtoWithoutPass })
+    async atualizarIdoso(@Param('email') usuario: string, @Body() body: IdosoDtoWithoutPass, @Res() res: Response) {
         const data = await this.idosoService.Update(body, usuario);
 
         return res.status(data.statusCode).json(data.body);
     }
 
-    @Delete(':usuarioId')
+    @Delete(':email')
     @ApiResponse({ status: 204, description: 'No Content' })
-    async deletarIdoso(@Param('usuarioId') usuario: string, @Res() res: Response){
+    async deletarIdoso(@Param('email') usuario: string, @Res() res: Response){
         const data = await this.idosoService.Delete(usuario);
 
         return res.status(data.statusCode).json(data.body);
