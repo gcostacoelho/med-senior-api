@@ -8,13 +8,11 @@ import { Module } from '@nestjs/common';
 
 @Module({
     imports: [
-        NotificacaoModule,
         SintomaModule,
         ConsultaModule,
         MedicacaoModule,
         IdosoModule,
         CuidadorModule,
-
     ],
 })
 export class AppModule { }

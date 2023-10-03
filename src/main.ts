@@ -20,7 +20,6 @@ async function bootstrap() {
         .addTag('Medicacao', 'Endpoints para a criação das funcionalidades que envolvem os medicamentos')
         .addTag('Consulta', 'Endpoints para a criação das funcionalidades que envolvem as consultas')
         .addTag('Sintoma', 'Endpoints para a criação das funcionalidades que envolvem os sintomas')
-        .addTag('Notificacao', 'Endpoints para a criação de alertas')
         .build();
 
     const document = SwaggerModule.createDocument(app, configSwagger);
