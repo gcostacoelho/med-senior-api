@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaConfig } from 'src/Configs/prismaConfig';
 import { Crud } from 'src/Interfaces/crud.interface';
 import { UsoMedicacaoDto } from 'src/Models/UsoMedicacao/UsoMedicacaoDto';
-import { HttpResponse, badRequest, created, serviceError, success } from 'src/Types/HttpResponse';
+import { HttpResponse, badRequest, created, noContent, serviceError, success } from 'src/Types/HttpResponse';
 
 @Injectable()
 export class UsoMedicacaoService implements Crud {
@@ -82,13 +82,13 @@ export class UsoMedicacaoService implements Crud {
       const { statusCode } = await this.Read(id);
 
       if (statusCode == 200) {
-        const usoMedicaoDeletado = await this.prisma.usoMedicacao.delete({
+        await this.prisma.usoMedicacao.delete({
           where: {
             id
           }
         });
 
-        return success(usoMedicaoDeletado);
+        return noContent();
       } else {
         return badRequest();
       }
