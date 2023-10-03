@@ -87,8 +87,8 @@ model Medicacao {
 
     UsoMedicacao UsoMedicacao[]
 
-    Idoso   Idoso?  @relation(fields: [idosoCodigo], references: [Codigo])
-    idosoCodigo String?
+    Idoso   Idoso?  @relation(fields: [idosoId], references: [id])
+    idosoId String?
 }
 
 model UsoMedicacao {

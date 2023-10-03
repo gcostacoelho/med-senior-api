@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaConfig } from 'src/Configs/prismaConfig';
 import { Crud } from 'src/Interfaces/crud.interface';
-import { HttpResponse, badRequest, serviceError, created, success } from 'src/Types/HttpResponse';
+import { HttpResponse, badRequest, serviceError, created, success, noContent } from 'src/Types/HttpResponse';
 import { Medicacao } from '../Models/Medicacao/Medicacao';
 import { MedicacaoDto } from 'src/Models/Medicacao/MedicacaoDto';
 
@@ -13,19 +13,30 @@ export class MedicacaoService implements Crud {
 
     async Create(data: MedicacaoDto): Promise<HttpResponse> {
         try{
-            const { nome, modoAdm, descricao, idosoCodigo} = data; // Desestruturação dos elementos\
+            const { nome, modoAdm, descricao, idosoId} = data; // Desestruturação dos elementos\
 
-            const medicacao = await this.prisma.medicacao.create({
-                data: {
-                    nome: nome,
-                    modoAdm: modoAdm,
-                    descricao: descricao,
-                    falhas: [],
-                    idosoCodigo: idosoCodigo
+            const idoso = await this.prisma.idoso.findUnique({
+                where: {
+                    id: idosoId
                 }
             });
 
-            return created(medicacao);
+            if (idoso){
+                const medicacao = await this.prisma.medicacao.create({
+                    data: {
+                        nome: nome,
+                        modoAdm: modoAdm,
+                        descricao: descricao,
+                        falhas: [],
+                        idosoId: idosoId
+                    }
+                });
+    
+                return created(medicacao);
+            }else {
+                return badRequest();
+            }
+            
         }catch (error) {
             console.error(error);
             return serviceError(error);
@@ -51,7 +62,7 @@ export class MedicacaoService implements Crud {
         try{
             const medicacao = await this.prisma.medicacao.findMany({
                 where: {
-                    idosoCodigo: id
+                    idosoId: id
                 }
             });
 
@@ -96,13 +107,13 @@ export class MedicacaoService implements Crud {
             const {statusCode, body} = await this.Read(id);
 
             if (statusCode == 200){
-                const medicaoDeletada = await this.prisma.medicacao.delete({
+                await this.prisma.medicacao.delete({
                     where: {
                         id
                     }
                 });
 
-                return success(medicaoDeletada);
+                return noContent();
             }else{
                 return badRequest();
             }

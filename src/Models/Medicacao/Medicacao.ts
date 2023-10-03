@@ -4,18 +4,18 @@ export class Medicacao {
     private descricao: string
     private estoque: number
     private falhas: Array<Date>
-    private idosoCodigo: string
+    private idosoId: string
 
     constructor (
         nome: string,
         modoAdm: string,
         descricao: string,
-        idosoCodigo: string
+        idosoId: string
     ){
         this.nome = nome;
         this.modoAdm = modoAdm,
         this.descricao = descricao,
-        this.idosoCodigo = idosoCodigo
+        this.idosoId = idosoId
     }
     
     public async aumentarEstoque(qtde: number): Promise<void>{

@@ -17,5 +17,5 @@ export class MedicacaoDto {
     falhas: Array<Date>
 
     @ApiProperty()
-    idosoCodigo: string
+    idosoId: string
 }
