@@ -4,7 +4,7 @@ import { Response } from "express";
 import { MedicacaoDto } from 'src/Models/Medicacao/MedicacaoDto';
 import { UsoMedicacaoDto } from 'src/Models/UsoMedicacao/UsoMedicacaoDto';
 import { MedicacaoService } from 'src/Services/medicacao.service';
-import { UsoMedicacaoService } from 'src/Services/usomedicacao.service';
+import { UsoMedicacaoService } from 'src/Services/usoMedicacao.service';
 
 @ApiTags('Medicacao')
 @Controller('medicacao')
@@ -80,6 +80,14 @@ export class MedicacaoController {
     @ApiResponse({ status: 200, type: UsoMedicacaoDto })
     async usoMed(@Param('idUso') id: string, @Res() res: Response) {
         const data = await this.usoMedicacaoService.Read(id);
+
+        return res.status(data.statusCode).json(data.body);
+    }
+
+    @Get('uso/todos/:idosoCodigo')
+    @ApiResponse({ status: 200, type: [UsoMedicacaoDto] })
+    async todosUsoMed(@Param('idosoCodigo') codigo: string, @Res() res: Response) {
+        const data = await this.usoMedicacaoService.readAllData(codigo);
 
         return res.status(data.statusCode).json(data.body);
     }

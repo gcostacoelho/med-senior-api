@@ -1,12 +1,8 @@
-import { MedicacaoService } from './../Services/medicacao.service';
-import { MedicacaoController } from './../Controllers/medicacao.controller';
-/*
-https://docs.nestjs.com/modules
-*/
-
 import { Module } from '@nestjs/common';
 import { PrismaConfig } from 'src/Configs/prismaConfig';
-import { UsoMedicacaoService } from 'src/Services/usomedicacao.service';
+import { MedicacaoService } from './../Services/medicacao.service';
+import { MedicacaoController } from './../Controllers/medicacao.controller';
+import { UsoMedicacaoService } from 'src/Services/usoMedicacao.service';
 
 @Module({
     imports: [],
