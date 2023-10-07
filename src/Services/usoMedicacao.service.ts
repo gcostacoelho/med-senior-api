@@ -14,7 +14,7 @@ export class UsoMedicacaoService implements Crud {
 
     async Create(data: UsoMedicacaoDto): Promise<HttpResponse> {
         try {
-            const { dosagem, intervalo, horaInicial, dataFinal, medId, idosoCodigo } = data; // Desestruturação dos elementos\
+            const { dosagem, intervalo, horaInicial, dataFinal, medId, idosoId } = data; // Desestruturação dos elementos\
 
             const UsoMedicacao = await this.prisma.usoMedicacao.create({
                 data: {
@@ -22,7 +22,7 @@ export class UsoMedicacaoService implements Crud {
                     intervalo,
                     horaInicial,
                     dataFinal,
-                    idosoCodigo,
+                    idosoId,
                     medId
                 }
             });
@@ -37,6 +37,9 @@ export class UsoMedicacaoService implements Crud {
     async Read(id: string): Promise<HttpResponse> {
         try {
             const usoMedicacao = await this.prisma.usoMedicacao.findUnique({
+                include:{
+                    medicacao: true
+                },
                 where: {
                     id: id
                 }
@@ -49,11 +52,14 @@ export class UsoMedicacaoService implements Crud {
         }
     }
 
-    async readAllData(codigo: string) {
+    async readAllData(idosoId: string) {
         try {
             const usoMedicacoesIdoso = await this.prisma.usoMedicacao.findMany({
+                include: {
+                    medicacao: true 
+                },
                 where: {
-                    idosoCodigo: codigo
+                    idosoId: idosoId
                 }
             })
 

@@ -103,8 +103,8 @@ model UsoMedicacao {
   medicacao Medicacao @relation(fields: [medId], references: [id])
   medId     String
 
-  idoso       Idoso  @relation(fields: [idosoCodigo], references: [Codigo])
-  idosoCodigo String
+  idoso       Idoso  @relation(fields: [idosoId], references: [id])
+  idosoId String
 }
 
 model Sintoma {

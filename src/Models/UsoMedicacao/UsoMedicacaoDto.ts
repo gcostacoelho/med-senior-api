@@ -14,7 +14,7 @@ export class UsoMedicacaoDto {
     dataFinal: Date
 
     @ApiProperty()
-    idosoCodigo: string
+    idosoId: string
 
     @ApiProperty()
     medId: string
