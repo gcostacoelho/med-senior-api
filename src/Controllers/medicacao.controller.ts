@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Res } from '@ne
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Response } from "express";
 import { MedicacaoDto } from 'src/Models/Medicacao/MedicacaoDto';
-import { UsoMedicacaoDto } from 'src/Models/UsoMedicacao/UsoMedicacaoDto';
+import { UsoMedicacaoDto, UsoMedicacaoResponseDto } from 'src/Models/UsoMedicacao/UsoMedicacaoDto';
 import { MedicacaoService } from 'src/Services/medicacao.service';
 import { UsoMedicacaoService } from 'src/Services/usoMedicacao.service';
 
@@ -77,7 +77,7 @@ export class MedicacaoController {
     }
 
     @Get('uso/:idUso')
-    @ApiResponse({ status: 200, type: UsoMedicacaoDto })
+    @ApiResponse({ status: 200, type: UsoMedicacaoResponseDto })
     async usoMed(@Param('idUso') id: string, @Res() res: Response) {
         const data = await this.usoMedicacaoService.Read(id);
 
@@ -85,7 +85,7 @@ export class MedicacaoController {
     }
 
     @Get('uso/todos/:idosoCodigo')
-    @ApiResponse({ status: 200, type: [UsoMedicacaoDto] })
+    @ApiResponse({ status: 200, type: [UsoMedicacaoResponseDto] })
     async todosUsoMed(@Param('idosoCodigo') codigo: string, @Res() res: Response) {
         const data = await this.usoMedicacaoService.readAllData(codigo);
 
