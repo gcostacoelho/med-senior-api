@@ -1,75 +1,81 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Med Senior - API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+> Projeto desenvolvido para as disciplinas de DSW e PDM
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Idosos muitas vezes enfrentam desafios em sua vida diária e podem precisar de ajuda em situações de emergência.
 
-## Description
+Solução Proposta: Um aplicativo web que oferece recursos de assistência, como alertas de medicamentos, rastreamento de saúde e botões de emergência para idosos. Ele também pode permitir que familiares e cuidadores monitorem o bem-estar dos idosos remotamente.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-## Installation
+## Configurando a aplicação
+### Instalando o Yarn (opcional)
 
 ```bash
 $ npm -g i yarn
+```
 
+### Instalando as dependências
+
+Rode o seguinte comando para instalar as dependências do projeto:
+
+```bash
+$ npm install
+# ou
 $ yarn install
 ```
 
-## Running the app
+### Criando o banco de dados utilizando Docker
+
+Dentro da raiz desse projeto, temos um arquivo chamado ```DatabaseContainer.zip```, faça a descompactação do mesmo em um diretório de sua preferência... Após a descompactação, dentro da pasta haverã o seguinte arquivo ```comandos_para_criacao.txt```, contendo instruções de como criar o seu banco  de dados utilizando o Docker, alẽm da string de conexão para o banco de dados utilizado.
+
+### Criando a variável de ambiente
+
+Para ter o acesso ao banco de dados é necessário uma string de conexão, essa string de conexão deve estar em um arquivo ```.env```... Para isso basta cria-lo utilizando como base o arquivo ```.env.example```, substituindo somente o conteúdo da variável.
+
+### Utilizando o Prisma
+
+Para rodar a aplicação é necessário gerar as tabelas no banco de dados, para isso o [Prisma](https://www.prisma.io/) está sendo utilizado.
+
+Os comandos necessários são:
+```bash
+$ yarn prisma generate
+$ yarn prisma migrate dev
+
+# ou
+
+$ npm prisma generate
+$ npm prisma migrate dev
+```
+
+### Rodando a aplicação
+
+Após realizar todas as etapas acima, já podemos iniciar a aplicação com o seguinte comando:
 
 ```bash
-# development
 $ yarn run start
-
-# watch mode
-$ yarn run start:dev
-
-# production mode
-$ yarn run start:prod
 ```
 
-## Test
+Após a aplicação terminar de subir, já vai ser possível realizar requisições através de algum API Client através da URL: http://localhost:5000.
 
-```bash
-# unit tests
-$ yarn run test
+## Documentação da API
 
-# e2e tests
-$ yarn run test:e2e
+A API também possui um Swagger (documentação), onde é possível verificar os possíveis retornos e  parâmetros necessários para fazer uma requisição bem sucedida.
 
-# test coverage
-$ yarn run test:cov
-```
+Para possuir acesso a documentação é necessário que a **API esteja em pleno funcionamento**, você pode visualiza-lá na seguinte URL: http://localhost:5000/api.
 
-## Support
+> Para obter o yaml do swagger, utilize a URL: http://localhost:5000/api-yaml.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## Outros repositórios
 
-## Stay in touch
+- Módulo de autenticação: [Med Senior - Auth](https://github.com/gcostacoelho/med-senior-auth)
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- Front End (desenvolvido em Vue): [Med Senior - Front](https://github.com/Rezende-Fabio/med-senior-front://)
 
-## License
+- Mobile (desenvolvido em Flutter): [Med Senior - Mobile](https://https://github.com/Rezende-Fabio/med-senior-mobile)
 
-Nest is [MIT licensed](LICENSE).
+## Colaboradores
+
+- [Fabio Rezende](https://github.com/Rezende-Fabio)
+- [Mateus Moraes](https://github.com/Mateus11Toledo)
+- [Hellen Turri](https://github.com/hellenTurri)
+- [Karin Kagi](https://github.com/karinkagi)
