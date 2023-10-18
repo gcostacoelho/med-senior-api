@@ -5,7 +5,7 @@
 * [Configurando a aplicação](#configurando-a-aplicação)
     * [Intalando o Yarn (opcional)](#instalando-o-yarn-opcional)
     * [Instalando as dependências](#instalando-as-dependências)
-    * [Criando o banco de daos utilizado Docker](#criando-o-banco-de-dados-utilizando-docker)
+    * [Criando o banco de dados utilizado Docker](#criando-o-banco-de-dados-utilizando-docker)
     * [Crinado a variável de ambiente](#criando-a-variável-de-ambiente)
     * [Utilizando o Prisma](#utilizando-o-prisma)
     * [Rodando a aplicação](#rodando-a-aplicação)
