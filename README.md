@@ -1,4 +1,19 @@
+
 # Med Senior - API
+
+* [Sobre](#sobre)
+* [Configurando a aplicação](#configurando-a-aplicação)
+    * [Intalando o Yarn (opcional)](#instalando-o-yarn-opcional)
+    * [Instalando as dependências](#instalando-as-dependências)
+    * [Criando o banco de daos utilizado Docker](#criando-o-banco-de-dados-utilizando-docker)
+    * [Crinado a variável de ambiente](#criando-a-variável-de-ambiente)
+    * [Utilizando o Prisma](#utilizando-o-prisma)
+    * [Rodando a aplicação](#rodando-a-aplicação)
+* [Documentação da API](#documentação-da-api)
+* [Outros repositórios](#outros-repositórios)
+* [Colaboradores](#colaboradores)
+
+## Sobre
 
 > Projeto desenvolvido para as disciplinas de DSW e PDM
 
@@ -69,9 +84,9 @@ Para possuir acesso a documentação é necessário que a **API esteja em pleno 
 
 - Módulo de autenticação: [Med Senior - Auth](https://github.com/gcostacoelho/med-senior-auth)
 
-- Front End (desenvolvido em Vue): [Med Senior - Front](https://github.com/Rezende-Fabio/med-senior-front://)
+- Front End (desenvolvido em Vue): [Med Senior - Front](https://github.com/Rezende-Fabio/med-senior-front)
 
-- Mobile (desenvolvido em Flutter): [Med Senior - Mobile](https://https://github.com/Rezende-Fabio/med-senior-mobile)
+- Mobile (desenvolvido em Flutter): [Med Senior - Mobile](https://github.com/Rezende-Fabio/med-senior-mobile)
 
 ## Colaboradores
 
