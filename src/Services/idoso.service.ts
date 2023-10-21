@@ -26,7 +26,7 @@ export class IdosoService implements Crud {
 
             const idosoClass = new Idoso(nome, telefone, new Date(dataNasc), email, senha, doencas);
 
-            data.senha = await idosoClass.encriptyPassword();
+            const hash = await idosoClass.encriptyPassword();
 
             const idoso = await this.prisma.idoso.create({
                 data: {
@@ -41,7 +41,7 @@ export class IdosoService implements Crud {
             await this.prisma.login.create({
                 data: {
                     emailUsuario: email,
-                    senhaUsuario: senha,
+                    senhaUsuario: hash,
                     idosoId: idoso.id
                 }
             });

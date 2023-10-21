@@ -25,7 +25,7 @@ export class CuidadorService implements Crud {
 
             const cuidadorClass = new Cuidador(nome, telefone, new Date(dataNasc), codigoIdoso, email, senha);
 
-            data.senha = await cuidadorClass.encriptyPassword();
+            const hash = await cuidadorClass.encriptyPassword();
 
             const cuidador = await this.prisma.cuidador.create({
                 data: {
@@ -39,7 +39,7 @@ export class CuidadorService implements Crud {
             await this.prisma.login.create({
                 data: {
                     emailUsuario: email,
-                    senhaUsuario: senha,
+                    senhaUsuario: hash,
                     cuidadorId: cuidador.id
                 }
             });
