@@ -3,15 +3,15 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
 model Idoso {
-  id       String   @id @default(uuid())
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
   Nome     String
   Telefone String
-  Codigo   String   @unique // Gerado pela aplicação
+  Codigo   String   @unique // Gerado pela aplicação 
   DataNasc DateTime
   Doencas  String[]
 
@@ -25,7 +25,7 @@ model Idoso {
 }
 
 model Cuidador {
-  id          String   @id @default(uuid())
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
   Nome        String
   Telefone    String
   DataNasc    DateTime
@@ -38,34 +38,34 @@ model Cuidador {
 }
 
 model DadosNotificacaoUsuario {
-  id String @id @default(uuid())
+  id String @id @default(auto()) @map("_id") @db.ObjectId
 
   fcmUrl String
   auth   String
   token  String
 
   Idoso   Idoso?  @relation(fields: [idosoId], references: [id])
-  idosoId String?
+  idosoId String? @db.ObjectId
 
   Cuidador   Cuidador? @relation(fields: [cuidadorId], references: [id])
-  cuidadorId String?
+  cuidadorId String?   @db.ObjectId
 }
 
 model Login {
-  id String @id @default(uuid())
+  id String @id @default(auto()) @map("_id") @db.ObjectId
 
   emailUsuario String @unique
   senhaUsuario String
 
   Idoso   Idoso?  @relation(fields: [idosoId], references: [id])
-  idosoId String?
+  idosoId String? @db.ObjectId
 
   Cuidador   Cuidador? @relation(fields: [cuidadorId], references: [id])
-  cuidadorId String?
+  cuidadorId String?   @db.ObjectId
 }
 
 model Consulta {
-  id String @id @default(uuid())
+  id String @id @default(auto()) @map("_id") @db.ObjectId
 
   dataHoraConsulta DateTime
   local            String
@@ -74,11 +74,11 @@ model Consulta {
   documentos       String
 
   Idoso   Idoso?  @relation(fields: [idosoId], references: [id])
-  idosoId String?
+  idosoId String? @db.ObjectId
 }
 
 model Medicacao {
-  id String @id @default(uuid())
+  id String @id @default(auto()) @map("_id") @db.ObjectId
 
   nome      String
   modoAdm   String
@@ -89,11 +89,11 @@ model Medicacao {
   UsoMedicacao UsoMedicacao[]
 
   Idoso   Idoso?  @relation(fields: [idosoId], references: [id])
-  idosoId String?
+  idosoId String? @db.ObjectId
 }
 
 model UsoMedicacao {
-  id String @id @default(uuid())
+  id String @id @default(auto()) @map("_id") @db.ObjectId
 
   dosagem     Float
   intervalo   Int
@@ -101,18 +101,18 @@ model UsoMedicacao {
   dataFinal   DateTime @db.Date
 
   medicacao Medicacao @relation(fields: [medId], references: [id])
-  medId     String
+  medId     String    @db.ObjectId
 
-  idoso       Idoso  @relation(fields: [idosoId], references: [id])
-  idosoId String
+  idoso   Idoso  @relation(fields: [idosoId], references: [id])
+  idosoId String @db.ObjectId
 }
 
 model Sintoma {
-  id String @id @default(uuid())
+  id String @id @default(auto()) @map("_id") @db.ObjectId
 
   descricao  String
   ocorrencia DateTime[]
 
   Idoso   Idoso?  @relation(fields: [idosoId], references: [id])
-  idosoId String?
+  idosoId String? @db.ObjectId
 }
