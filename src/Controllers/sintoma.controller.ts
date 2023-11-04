@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Res } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Response } from "express";
-import { SintomaDto } from 'src/Models/SIntoma/SintomaDto';
+import { SintomaDto, SintomaResponseDto } from 'src/Models/SIntoma/SintomaDto';
 import { SintomaService } from 'src/Services/sintoma.service';
 
 @ApiTags('Sintoma')
@@ -14,7 +14,7 @@ export class SintomaController {
     constructor(private readonly sintomaService: SintomaService) { }
 
     @Post()
-    @ApiResponse({ status: 201, type: SintomaDto })
+    @ApiResponse({ status: 201, type: SintomaResponseDto })
     async novoSintoma(@Body() body: SintomaDto, @Res() res: Response) {
         const data = await this.sintomaService.Create(body);
 
