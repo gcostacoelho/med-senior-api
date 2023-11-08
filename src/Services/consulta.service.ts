@@ -1,29 +1,96 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaConfig } from 'src/Configs/prismaConfig';
-import { Crud } from 'src/Interfaces/crud.interface';
-import { HttpResponse, success } from 'src/Types/HttpResponse';
+
+import { PrismaConfig } from '../Configs/prismaConfig';
+import { Crud } from '../Interfaces/crud.interface';
+import { ConsultaDto } from '../Models/Consulta/ConsultaDto';
+import { HttpResponse, badRequest, created, noContent, serviceError, success } from '../Types/HttpResponse';
 
 @Injectable()
 export class ConsultaService implements Crud {
     constructor(private readonly prisma: PrismaConfig) { }
 
-    Create(data: Object): Promise<HttpResponse> {
+    async Create(data: ConsultaDto): Promise<HttpResponse> {
+        try {
+            const consulta = await this.prisma.consulta.create({
+                data,
+            });
 
-        success('batat')
-        throw new Error('Method not implemented.');
-    }
-    Read(id: string): Promise<HttpResponse> {
-        throw new Error('Method not implemented.');
-    }
-
-    ReadSpecified(id: string): Promise<HttpResponse> {
-        throw new Error('Method not implemented');
+            return created(consulta);
+        } catch (error) {
+            serviceError(error);
+        }
     }
 
-    Update(data: Object, id: string): Promise<HttpResponse> {
-        throw new Error('Method not implemented.');
+    async Read(id: string): Promise<HttpResponse> {
+        try {
+            const consulta = await this.prisma.consulta.findMany({
+                where: {
+                    idosoId: id
+                }
+            });
+
+            return success(consulta);
+        } catch (error) {
+            return serviceError(error);
+        }
     }
-    Delete(id: string): Promise<HttpResponse> {
-        throw new Error('Method not implemented.');
+
+    async ReadSpecified(id: string): Promise<HttpResponse> {
+        try {
+            const consultaEspecifica = await this.prisma.consulta.findUnique({
+                where: {
+                    id
+                }
+            });
+
+            return success(consultaEspecifica);
+        } catch (error) {
+            return serviceError(error);
+        }
+    }
+
+    async Update(data: ConsultaDto, id: string): Promise<HttpResponse> {
+        try {
+            const consultaExiste = await this.ReadSpecified(id);
+
+            if (consultaExiste.statusCode != 200) {
+                return badRequest();
+            }
+
+            const { dataHoraConsulta, local, especialidade, medico, documentos } = data;
+
+            const consultaAtualizada = await this.prisma.consulta.update({
+                data: {
+                    dataHoraConsulta,
+                    local,
+                    especialidade,
+                    medico,
+                    documentos
+                },
+                where: { id }
+            });
+
+            return success(consultaAtualizada);
+        } catch (error) {
+            return serviceError(error);
+        }
+    }
+
+    async Delete(id: string): Promise<HttpResponse> {
+        try {
+            const consultaExiste = await this.ReadSpecified(id);
+
+            if (consultaExiste.statusCode != 200) {
+                return badRequest();
+            }
+
+            await this.prisma.consulta.delete({
+                where: { id }
+            });
+
+            return noContent();
+        } catch (error) {
+            return serviceError(error);
+        }
     }
 }

@@ -21,7 +21,7 @@ export class ConsultaController {
         return res.status(data.statusCode).json(data.body);
     }
 
-    @Get(':usuarioId')
+    @Get('/todos/:usuarioId')
     @ApiResponse({ status: 200, type: [ConsultaDto] })
     async lerConsultas(@Param('usuarioId') usuario: string, @Res() res: Response) {
         const data = await this.consultaService.Read(usuario);
