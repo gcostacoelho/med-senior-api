@@ -15,4 +15,7 @@ export class ConsultaDto {
 
     @ApiProperty()
     documentos: string
+
+    @ApiProperty()
+    idosoId: string
 }
