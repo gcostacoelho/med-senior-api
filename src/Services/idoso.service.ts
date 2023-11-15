@@ -68,6 +68,7 @@ export class IdosoService implements Crud {
                     UsoMedicacao: true,
                     Cuidador: true,
                     Consulta: true,
+                    Sintoma: true
                 },
                 where: {
                     id: id
