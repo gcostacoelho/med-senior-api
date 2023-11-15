@@ -22,9 +22,9 @@ export class IdosoController {
         return res.status(data.statusCode).json(data.body);
     }
 
-    @Get(':email')
+    @Get(':idosoId')
     @ApiResponse({ status: 200, type: IdosoDtoWithoutPass })
-    async lerIdoso(@Param('email') usuario: string, @Res() res: Response) {
+    async lerIdoso(@Param('idosoId') usuario: string, @Res() res: Response) {
         const data = await this.idosoService.Read(usuario);
 
         return res.status(data.statusCode).json(data.body);
