@@ -54,17 +54,24 @@ export class IdosoService implements Crud {
         }
     }
 
-    async Read(email: string): Promise<HttpResponse> {
+    async Read(id: string): Promise<HttpResponse> {
         try {
-            const loginIdoso = await this.login.getDataFromEmail(email);
+            // const loginIdoso = await this.login.getDataFromEmail(email);
 
-            if (!loginIdoso) {
-                return badRequest();
-            }
+            // if (!loginIdoso) {
+            //     return badRequest();
+            // }
 
             const idoso = await this.prisma.idoso.findUnique({
+                include: {
+                    Medicacao: true,
+                    UsoMedicacao: true,
+                    Cuidador: true,
+                    Consulta: true,
+                    Sintoma: true
+                },
                 where: {
-                    id: loginIdoso.idosoId
+                    id: id
                 }
             });
 
