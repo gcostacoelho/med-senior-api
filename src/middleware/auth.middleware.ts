@@ -8,8 +8,9 @@ export class AuthMiddleware implements NestMiddleware {
         try {
             if (req.headers.authorization) {
                 const token: string = req.headers.authorization.split(" ")[1];
-
-                const { data, status } = await axios.get(`http://localhost:5001/authentication/validate/${token}`);
+                const url = process.env.IP_ADDRESS || "localhost"
+                
+                const { data, status } = await axios.get(`http://${url}:5001/authentication/validate/${token}`);
 
                 return status == 200 ? next() : res.status(HttpStatus.UNAUTHORIZED).json('Unauthorized');
             }

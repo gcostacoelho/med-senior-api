@@ -90,6 +90,7 @@ services:
       dockerfile: ./Dockerfile
     environment:
       - DATABASE_URL=mongodb://172.18.0.1:27017/admin
+      - IP_ADDRESS=172.18.0.1
     expose:
       - '5000'
     ports:
@@ -107,6 +108,22 @@ services:
       - '3000'
     ports:
       - '3000:3000'
+    networks:
+      - clusterGeral
+  
+  med-senior-auth:
+    container_name: med-senior-auth-container
+    restart: always
+    build:
+      context: ./med-senior-auth
+      dockerfile: ./Dockerfile
+    environment:
+      - DATABASE_URL=mongodb://172.18.0.1:27017/admin
+      - SECRET=mySecret_medSeniorAuth
+    expose:
+      - '5001'
+    ports:
+      - '5001:5001'
     networks:
       - clusterGeral
   
