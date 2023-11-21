@@ -1,22 +1,61 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaConfig } from 'src/Configs/prismaConfig';
-import { Crud } from 'src/Interfaces/crud.interface';
-import { HttpResponse } from 'src/Types/HttpResponse';
+import { CronJob } from 'cron';
+
+import { SchedulerRegistry } from '@nestjs/schedule';
+
+import { PrismaConfig } from '../Configs/prismaConfig';
+import { WebPushConfig } from '../Configs/webPush.config';
+import { HttpResponse, success } from '../Types/HttpResponse';
 
 @Injectable()
-export class NotificacaoService implements Crud {
-    constructor(private readonly prisma: PrismaConfig) { }
+export class NotificacaoService {
+    constructor(
+        private readonly prisma: PrismaConfig,
+        private readonly webPush: WebPushConfig,
+        private readonly scheduler: SchedulerRegistry
+    ) { }
 
-    Create(data: Object): Promise<HttpResponse> {
-        throw new Error('Method not implemented.');
+    getToken(): HttpResponse {
+        const token = this.webPush.publicKey;
+
+        return success(token);
     }
-    Read(id: string): Promise<HttpResponse> {
-        throw new Error('Method not implemented.');
+
+    async registerUserToSendNotifications(data): Promise<HttpResponse> {
+        return await success("");
     }
-    Update(data: Object, id: string): Promise<HttpResponse> {
-        throw new Error('Method not implemented.');
+
+    private async getInfosToSendNotification(userId: string) {
+        try {
+            const userNotificationData = await this.prisma.dadosNotificacaoUsuario.findFirst({
+                where: {
+                    cuidadorId: userId,
+                    idosoId: userId
+                }
+            });
+
+            return userNotificationData;
+        } catch (error) {
+            console.error(error);
+            return error;
+        }
     }
-    Delete(id: string): Promise<HttpResponse> {
-        throw new Error('Method not implemented.');
+
+    async createCronJob(userId: string, cron: string, text: string, jobName: string) {
+        const notificationsData = await this.getInfosToSendNotification(userId);
+
+        console.log(notificationsData);
+
+        const job = new CronJob(cron, () => {
+            this.webPush.sendNot(notificationsData.token, text);
+        });
+
+        console.log("Job Criado");
+
+        this.scheduler.addCronJob(jobName, job);
+
+        job.start();
     }
+
+    deleteCronJob(jobName: string) { }
 }

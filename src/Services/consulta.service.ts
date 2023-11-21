@@ -4,16 +4,25 @@ import { PrismaConfig } from '../Configs/prismaConfig';
 import { Crud } from '../Interfaces/crud.interface';
 import { ConsultaDto } from '../Models/Consulta/ConsultaDto';
 import { HttpResponse, badRequest, created, noContent, serviceError, success } from '../Types/HttpResponse';
+import { NotificacaoService } from './notificacao.service';
+import { cronPatternConsult } from 'src/utils/cronPatterns';
 
 @Injectable()
 export class ConsultaService implements Crud {
-    constructor(private readonly prisma: PrismaConfig) { }
+    constructor(
+        private readonly prisma: PrismaConfig,
+        private readonly notificacaoService: NotificacaoService
+    ) { }
 
     async Create(data: ConsultaDto): Promise<HttpResponse> {
         try {
             const consulta = await this.prisma.consulta.create({
                 data,
             });
+
+            const cronPattern = cronPatternConsult(data.dataHoraConsulta);
+
+            await this.notificacaoService.createCronJob(data.idosoId, cronPattern, `Sua consulta médica com o Dr. ${consulta.medico} está agendada para hoje`, `${consulta.id}-${data.especialidade}-${data.medico}`);
 
             return created(consulta);
         } catch (error) {
@@ -87,6 +96,8 @@ export class ConsultaService implements Crud {
             await this.prisma.consulta.delete({
                 where: { id }
             });
+
+            this.notificacaoService.deleteCronJob(`${consultaExiste.body.id}-${consultaExiste.body.especialidade}-${consultaExiste.body.medico}`)
 
             return noContent();
         } catch (error) {
