@@ -42,7 +42,7 @@ export class MedicacaoController {
 
     @Patch(':medicacaoId/:qtdMedicacao')
     @ApiResponse({ status: 200, type: MedicacaoDto })
-    async aumentarEstoque(@Param('medicacaoId') medicacao: string, @Param('qtdMedicacao') qtd: number, @Res() res: Response) {
+    async aumentarEstoque(@Param('medicacaoId') medicacao: string, @Param('qtdMedicacao') qtd: string, @Res() res: Response) {
         const data = await this.medicacaoService.AumentarEstoque(medicacao, qtd);
 
         return res.status(data.statusCode).json(data.body);
