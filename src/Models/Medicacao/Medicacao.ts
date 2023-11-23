@@ -1,30 +1,34 @@
 export class Medicacao { 
-    private nome: string
-    private modoAdm: string
-    private descricao: string
-    private estoque: number
-    private falhas: Array<Date>
-    private idosoId: string
+    nome: string
+    modoAdm: string
+    descricao: string
+    estoque: number
+    falhas: Array<Date>
+    idosoId: string
 
     constructor (
         nome: string,
         modoAdm: string,
         descricao: string,
-        idosoId: string
+        idosoId: string,
+        falhas: Array<Date>,
+        estoque: number
     ){
         this.nome = nome;
-        this.modoAdm = modoAdm,
-        this.descricao = descricao,
-        this.idosoId = idosoId
+        this.modoAdm = modoAdm;
+        this.descricao = descricao;
+        this.idosoId = idosoId;
+        this.falhas = falhas;
+        this.estoque = estoque;
     }
     
     public async aumentarEstoque(qtde: number): Promise<void>{
         this.estoque += qtde;
     } 
 
-    public async diminuirEstoque(qtde: number): Promise<boolean>{
+    public diminuirEstoque(qtde: number): boolean{
         if (this.estoque == 0){
-            return true;
+            return false;
         }else{
             this.estoque -= qtde;
             return true;

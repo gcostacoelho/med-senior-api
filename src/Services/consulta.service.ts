@@ -1,11 +1,13 @@
 import { Injectable } from '@nestjs/common';
-
+import { getDaysOfWeek } from '../utils/daysOfWeek';
+import { Sintoma } from '../Models/SIntoma/Sintoma';
 import { PrismaConfig } from '../Configs/prismaConfig';
 import { Crud } from '../Interfaces/crud.interface';
 import { ConsultaDto } from '../Models/Consulta/ConsultaDto';
 import { HttpResponse, badRequest, created, noContent, serviceError, success } from '../Types/HttpResponse';
 import { NotificacaoService } from './notificacao.service';
 import { cronPatternConsult } from 'src/utils/cronPatterns';
+import { Consulta } from 'src/Models/Consulta/Consulta';
 
 @Injectable()
 export class ConsultaService implements Crud {
@@ -35,10 +37,40 @@ export class ConsultaService implements Crud {
             const consulta = await this.prisma.consulta.findMany({
                 where: {
                     idosoId: id
-                }
+                },
+                orderBy: {
+                    dataHoraConsulta: 'asc',
+                },
             });
 
             return success(consulta);
+        } catch (error) {
+            return serviceError(error);
+        }
+    }
+
+    async readWeekData(id: string): Promise<HttpResponse> {
+        try {
+            const diasDaSemana = getDaysOfWeek(new Date());
+            const { statusCode, body } = await this.Read(id);
+
+            if (statusCode == 200) {
+                let listaConsultas = [];
+
+                body.forEach(element => {
+                    const consulta = new Consulta(element.dataHoraConsulta, element.local, element.especialidade, element.idosoId, element.medico, element.documentos);
+
+                    const respData = consulta.verificarSemana(diasDaSemana);
+
+                    if (respData) {
+                        listaConsultas.push(consulta);
+                    }
+                });
+
+                return success(listaConsultas);
+            }else{
+                noContent();
+            }
         } catch (error) {
             return serviceError(error);
         }
