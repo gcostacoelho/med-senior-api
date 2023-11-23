@@ -92,6 +92,14 @@ export class MedicacaoController {
         return res.status(data.statusCode).json(data.body);
     }
 
+    @Get('uso/dia/:idosoCodigo')
+    @ApiResponse({ status: 200, type: [UsoMedicacaoResponseDto] })
+    async diaUsoMed(@Param('idosoCodigo') codigo: string, @Res() res: Response) {
+        const data = await this.usoMedicacaoService.readDayData(codigo);
+
+        return res.status(data.statusCode).json(data.body);
+    }
+
     @Patch('uso/:idUso/:qtd')
     @ApiResponse({ status: 200, type: MedicacaoDto })
     async tomarRemedio(@Param('idUso') id: string, @Param('qtd') qtd: number, @Res() res: Response) {

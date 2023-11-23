@@ -29,6 +29,14 @@ export class ConsultaController {
         return res.status(data.statusCode).json(data.body);
     }
 
+    @Get('/semana/:usuarioId')
+    @ApiResponse({ status: 200, type: [ConsultaDto] })
+    async lerConsultasSemana(@Param('usuarioId') usuario: string, @Res() res: Response) {
+        const data = await this.consultaService.readWeekData(usuario);
+
+        return res.status(data.statusCode).json(data.body);
+    }
+
     @Get(':consultaId')
     @ApiResponse({ status: 200, type: ConsultaDto })
     async lerConsultaEspecifica(@Param('consultaId') consulta: string, @Res() res: Response) {
