@@ -26,7 +26,7 @@ export class Medicacao {
         this.estoque += qtde;
     } 
 
-    public async diminuirEstoque(qtde: number): Promise<boolean>{
+    public diminuirEstoque(qtde: number): boolean{
         if (this.estoque == 0){
             return false;
         }else{
