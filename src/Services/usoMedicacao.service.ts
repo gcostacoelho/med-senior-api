@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaConfig } from 'src/Configs/prismaConfig';
 import { Crud } from 'src/Interfaces/crud.interface';
 import { UsoMedicacaoDto } from 'src/Models/UsoMedicacao/UsoMedicacaoDto';
+import { UsoMedicacao } from '../Models/UsoMedicacao/UsoMedicacao';
 import { HttpResponse, badRequest, created, noContent, serviceError, success } from 'src/Types/HttpResponse';
 import { MedicacaoService } from './medicacao.service';
 
@@ -64,6 +65,29 @@ export class UsoMedicacaoService implements Crud {
             })
 
             return success(usoMedicacoesIdoso);
+        } catch (error) {
+            serviceError(error);
+        }
+    }
+
+    async readDayData(idosoId: string) {
+        try {
+            const {statusCode, body} = await this.readAllData(idosoId);
+
+            let listagemMed = [];
+            
+            if (statusCode == 200){
+                body.forEach(element => {
+                    const usoMedicacao = new UsoMedicacao(element.dosagem, element.intervalo, element.horaInicial, element.idosoId, element.dataFinal, element.medicacao);
+
+                    const respDia = usoMedicacao.calcularDia();
+
+                    if (respDia){
+                        listagemMed.push(usoMedicacao)
+                    }
+                });
+            }
+            return success(listagemMed);
         } catch (error) {
             serviceError(error);
         }

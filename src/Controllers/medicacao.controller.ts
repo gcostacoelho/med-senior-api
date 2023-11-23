@@ -42,8 +42,16 @@ export class MedicacaoController {
 
     @Patch(':medicacaoId/:qtdMedicacao')
     @ApiResponse({ status: 200, type: MedicacaoDto })
-    async aumentarEstoque(@Param('medicacaoId') medicacao: string, @Param('qtdMedicacao') qtd: number, @Res() res: Response) {
-        const data = await this.medicacaoService.AumentarEstoque(medicacao, qtd);
+    async aumentarEstoque(@Param('medicacaoId') medicacao: string, @Param('qtdMedicacao') qtd: string, @Res() res: Response) {
+        const data = await this.medicacaoService.aumentarEstoque(medicacao, qtd);
+
+        return res.status(data.statusCode).json(data.body);
+    }
+
+    @Patch('uso/:medicacaoID/:qtd')
+    @ApiResponse({ status: 200, type: MedicacaoDto })
+    async tomarRemedio(@Param('medicacaoID') id: string, @Param('qtd') qtd: string, @Res() res: Response) {
+        const data = await this.medicacaoService.diminuirEstoque(id, qtd);
 
         return res.status(data.statusCode).json(data.body);
     }
@@ -92,10 +100,12 @@ export class MedicacaoController {
         return res.status(data.statusCode).json(data.body);
     }
 
-    @Patch('uso/:idUso/:qtd')
-    @ApiResponse({ status: 200, type: MedicacaoDto })
-    async tomarRemedio(@Param('idUso') id: string, @Param('qtd') qtd: number, @Res() res: Response) {
+    @Get('uso/dia/:idosoCodigo')
+    @ApiResponse({ status: 200, type: [UsoMedicacaoResponseDto] })
+    async diaUsoMed(@Param('idosoCodigo') codigo: string, @Res() res: Response) {
+        const data = await this.usoMedicacaoService.readDayData(codigo);
 
+        return res.status(data.statusCode).json(data.body);
     }
 
     @Put('/uso/:idUso')
