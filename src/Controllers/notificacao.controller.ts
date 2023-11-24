@@ -1,6 +1,7 @@
-import { Controller, Delete, Get, Param, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Res } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Response } from "express";
+import { NotificacaoDto } from 'src/Models/Notificacao/NotificacaoDto';
 import { NotificacaoService } from 'src/Services/notificacao.service';
 
 @ApiTags('Notificacao')
@@ -12,15 +13,17 @@ import { NotificacaoService } from 'src/Services/notificacao.service';
 export class NotificacaoController {
     constructor(private readonly notificacaoService: NotificacaoService) { }
 
-    @Get()
-    @ApiResponse({ status: 200 })
-    async getAllJobs(@Res() res: Response) { }
+    @Get("token")
+    getPushNotificationKey(@Res() res: Response){
+        const data = this.notificacaoService.getToken();
 
-    @Get(':jobName')
-    @ApiResponse({ status: 200 })
-    async getJobEpecified(@Param('jobName') name: string, @Res() res: Response) { }
+        return res.status(data.statusCode).json(data.body);
+    }
 
-    @Delete(':jobName')
-    @ApiResponse({ status: 204, description: 'No content' })
-    async deleteJob(@Param('jobName') name: string, @Res() res: Response) { }
+    @Post("register/:idUser")
+    async registerUserToSendPushNotifications(@Body() body: NotificacaoDto, @Param('idUser') idUser: string ,@Res() res: Response) {
+        const data = await this.notificacaoService.registerUserToSendNotifications(body, idUser);
+
+        return res.status(data.statusCode).json(data.body);
+    }
 }
