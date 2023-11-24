@@ -11,14 +11,18 @@ import { ConsultaController } from '../Controllers/consulta.controller';
 import { MedicacaoController } from '../Controllers/medicacao.controller';
 import { CuidadorController } from '../Controllers/cuidador.controller';
 import { IdosoController } from '../Controllers/idoso.controller';
+import { ScheduleModule } from '@nestjs/schedule';
+import { NotificacaoModule } from './notificacao.module';
 
 @Module({
     imports: [
+        ScheduleModule.forRoot(),
         SintomaModule,
         ConsultaModule,
         MedicacaoModule,
         IdosoModule,
         CuidadorModule,
+        NotificacaoModule
     ],
 })
 export class AppModule {

@@ -1,18 +1,21 @@
 import { OnModuleInit } from "@nestjs/common";
-import { sendNotification, setVapidDetails } from "web-push";
+import { sendNotification, setVapidDetails, generateVAPIDKeys } from "web-push";
 
 export class WebPushConfig implements OnModuleInit {
-    public readonly publicKey: string = process.env.PUBLIC_KEY_WEB_PUSH;
-    public readonly privateKey: string = process.env.PRIVATE_KEY_WEB_PUSH;
+    public publicKey: string;
+    public privateKey: string;
 
     onModuleInit() {
+        const { publicKey, privateKey } = generateVAPIDKeys();
+        this.publicKey = publicKey;
+        this.privateKey = privateKey;
+
         const address = process.env.IP_ADRESS || "localhost";
 
-        setVapidDetails(`https://${address}:5001`, this.publicKey, this.privateKey);
+        setVapidDetails(`https://${address}:3000`, this.publicKey, this.privateKey);
     }
 
-    sendNot(sub, text){
+    sendNot(sub, text) {
         sendNotification(sub, text);
     }
-
 }

@@ -7,9 +7,7 @@ import { NotificacaoService } from './../Services/notificacao.service';
 import { NotificacaoController } from './../Controllers/notificacao.controller';
 
 @Module({
-    imports: [
-        ScheduleModule.forRoot()
-    ],
+    imports: [],
     controllers: [NotificacaoController],
     providers: [NotificacaoService, PrismaConfig, WebPushConfig],
     exports: [NotificacaoService]

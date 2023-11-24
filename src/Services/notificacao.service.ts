@@ -5,7 +5,7 @@ import { SchedulerRegistry } from '@nestjs/schedule';
 
 import { PrismaConfig } from '../Configs/prismaConfig';
 import { WebPushConfig } from '../Configs/webPush.config';
-import { HttpResponse, success } from '../Types/HttpResponse';
+import { HttpResponse, serviceError, success } from '../Types/HttpResponse';
 
 @Injectable()
 export class NotificacaoService {
@@ -21,15 +21,30 @@ export class NotificacaoService {
         return success(token);
     }
 
-    async registerUserToSendNotifications(data): Promise<HttpResponse> {
-        return await success("");
+    async registerUserToSendNotifications(data: any, idUser: string): Promise<HttpResponse> {
+        try {
+            const dataToSaveInDB = {
+                auth: data.keys.auth,
+                fcmUrl: data.endpoint,
+                token: data.keys.p256dh,
+                idosoId: idUser,
+            }
+
+            await this.prisma.dadosNotificacaoUsuario.create({
+                data: dataToSaveInDB,
+            });
+
+            return success(data);
+        } catch (error) {
+            console.log(error);
+            return serviceError(error);
+        }
     }
 
     private async getInfosToSendNotification(userId: string) {
         try {
             const userNotificationData = await this.prisma.dadosNotificacaoUsuario.findFirst({
                 where: {
-                    cuidadorId: userId,
                     idosoId: userId
                 }
             });
@@ -44,10 +59,20 @@ export class NotificacaoService {
     async createCronJob(userId: string, cron: string, text: string, jobName: string) {
         const notificationsData = await this.getInfosToSendNotification(userId);
 
-        console.log(notificationsData);
+        const onlyNotificationsInformations = {
+            endpoint: notificationsData.fcmUrl,
+            expirationTime: null,
+            keys: {
+                p256dh: notificationsData.token,
+                auth: notificationsData.auth
+            }
+
+        }
 
         const job = new CronJob(cron, () => {
-            this.webPush.sendNot(notificationsData.token, text);
+            console.log("Job executando");
+            
+            this.webPush.sendNot(onlyNotificationsInformations, text);
         });
 
         console.log("Job Criado");
@@ -57,5 +82,8 @@ export class NotificacaoService {
         job.start();
     }
 
-    deleteCronJob(jobName: string) { }
+    deleteCronJob(jobName: string) {
+        this.scheduler.deleteCronJob(jobName);
+        console.log("Job deleted");
+    }
 }
