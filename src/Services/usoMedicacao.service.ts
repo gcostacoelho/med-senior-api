@@ -5,12 +5,15 @@ import { UsoMedicacaoDto } from 'src/Models/UsoMedicacao/UsoMedicacaoDto';
 import { UsoMedicacao } from '../Models/UsoMedicacao/UsoMedicacao';
 import { HttpResponse, badRequest, created, noContent, serviceError, success } from 'src/Types/HttpResponse';
 import { MedicacaoService } from './medicacao.service';
+import { cronPatternUsoMedicacao } from 'src/utils/cronPatterns';
+import { NotificacaoService } from './notificacao.service';
 
 @Injectable()
 export class UsoMedicacaoService implements Crud {
     constructor(
         private readonly prisma: PrismaConfig,
-        private readonly medicacao: MedicacaoService
+        private readonly medicacao: MedicacaoService,
+        private readonly notificacaoService: NotificacaoService
     ) { }
 
     async Create(data: UsoMedicacaoDto): Promise<HttpResponse> {
@@ -28,6 +31,12 @@ export class UsoMedicacaoService implements Crud {
                 }
             });
 
+            const cronPattern = cronPatternUsoMedicacao(intervalo);
+            const medicacao = await this.medicacao.Read(medId);
+            const nomeMedicacao = medicacao.body.nome;
+
+            await this.notificacaoService.createCronJob(idosoId, cronPattern, `Está na hora de tomar a medicação ${nomeMedicacao}`, `idMed-${medId}`);
+
             return created(UsoMedicacao);
         } catch (error) {
             console.error(error);
@@ -38,7 +47,7 @@ export class UsoMedicacaoService implements Crud {
     async Read(id: string): Promise<HttpResponse> {
         try {
             const usoMedicacao = await this.prisma.usoMedicacao.findUnique({
-                include:{
+                include: {
                     medicacao: true
                 },
                 where: {
@@ -57,7 +66,7 @@ export class UsoMedicacaoService implements Crud {
         try {
             const usoMedicacoesIdoso = await this.prisma.usoMedicacao.findMany({
                 include: {
-                    medicacao: true 
+                    medicacao: true
                 },
                 where: {
                     idosoId: idosoId
@@ -72,17 +81,17 @@ export class UsoMedicacaoService implements Crud {
 
     async readDayData(idosoId: string) {
         try {
-            const {statusCode, body} = await this.readAllData(idosoId);
+            const { statusCode, body } = await this.readAllData(idosoId);
 
             let listagemMed = [];
-            
-            if (statusCode == 200){
+
+            if (statusCode == 200) {
                 body.forEach(element => {
                     const usoMedicacao = new UsoMedicacao(element.dosagem, element.intervalo, element.horaInicial, element.idosoId, element.dataFinal, element.medicacao);
 
                     const respDia = usoMedicacao.calcularDia();
 
-                    if (respDia){
+                    if (respDia) {
                         listagemMed.push(usoMedicacao)
                     }
                 });
@@ -126,7 +135,7 @@ export class UsoMedicacaoService implements Crud {
 
     async Delete(id: string): Promise<HttpResponse> {
         try {
-            const { statusCode } = await this.Read(id);
+            const { body, statusCode } = await this.Read(id);
 
             if (statusCode == 200) {
                 await this.prisma.usoMedicacao.delete({
@@ -134,6 +143,10 @@ export class UsoMedicacaoService implements Crud {
                         id
                     }
                 });
+
+                console.log(body);
+                
+                this.notificacaoService.deleteCronJob(`idMed-${body.medId}`);
 
                 return noContent();
             } else {

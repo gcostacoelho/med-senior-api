@@ -14,6 +14,21 @@ export function cronPatternConsult(date: Date): string {
     }
 }
 
-export function cronPatternUsoMedicacao(): string {
-    return "";
+export function cronPatternUsoMedicacao(intervalo: number): string {
+    try {
+        // TODO: utilizar a datas final para montar o cron pattern 
+
+        const hora = intervalo.toString().split('.');
+
+        let horas = parseInt(hora[0])
+    
+        // Limita o máximo de horas para 23
+        if (horas > 23) {
+            horas = 23;
+        }
+    
+        return `0 */${horas} * * *`;
+    } catch (error) {
+        return "";
+    }
 }

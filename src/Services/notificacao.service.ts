@@ -41,7 +41,7 @@ export class NotificacaoService {
         }
     }
 
-    private async getInfosToSendNotification(userId: string) {
+    async getInfosToSendNotification(userId: string) {
         try {
             const userNotificationData = await this.prisma.dadosNotificacaoUsuario.findFirst({
                 where: {
@@ -66,7 +66,6 @@ export class NotificacaoService {
                 p256dh: notificationsData.token,
                 auth: notificationsData.auth
             }
-
         }
 
         const job = new CronJob(cron, () => {

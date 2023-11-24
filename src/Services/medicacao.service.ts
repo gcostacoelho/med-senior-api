@@ -4,16 +4,20 @@ import { Crud } from 'src/Interfaces/crud.interface';
 import { HttpResponse, badRequest, serviceError, created, success, noContent, notFound } from 'src/Types/HttpResponse';
 import { Medicacao } from '../Models/Medicacao/Medicacao';
 import { MedicacaoDto } from 'src/Models/Medicacao/MedicacaoDto';
+import { WebPushConfig } from 'src/Configs/webPush.config';
+import { NotificacaoService } from './notificacao.service';
 
 @Injectable()
 export class MedicacaoService implements Crud {
     constructor(
-        private readonly prisma: PrismaConfig
+        private readonly prisma: PrismaConfig,
+        private readonly webPush: WebPushConfig,
+        private readonly notificacaoService: NotificacaoService
     ) { }
 
     async Create(data: MedicacaoDto): Promise<HttpResponse> {
-        try{
-            const { nome, modoAdm, descricao, idosoId} = data; // Desestruturação dos elementos\
+        try {
+            const { nome, modoAdm, descricao, idosoId } = data; // Desestruturação dos elementos\
 
             const idoso = await this.prisma.idoso.findUnique({
                 where: {
@@ -21,7 +25,7 @@ export class MedicacaoService implements Crud {
                 }
             });
 
-            if (idoso){
+            if (idoso) {
                 const medicacao = await this.prisma.medicacao.create({
                     data: {
                         nome: nome,
@@ -32,20 +36,20 @@ export class MedicacaoService implements Crud {
                         estoque: 0
                     }
                 });
-    
+
                 return created(medicacao);
-            }else {
+            } else {
                 return badRequest();
             }
-            
-        }catch (error) {
+
+        } catch (error) {
             console.error(error);
             return serviceError(error);
         }
     }
 
     async Read(id: string): Promise<HttpResponse> {
-        try{
+        try {
             const medicacao = await this.prisma.medicacao.findUnique({
                 where: {
                     id: id
@@ -53,14 +57,14 @@ export class MedicacaoService implements Crud {
             });
 
             return success(medicacao);
-        }catch (error) {
+        } catch (error) {
             console.error(error);
             return serviceError(error);
         }
     }
 
     async ReadAllMedicines(id: string): Promise<HttpResponse> {
-        try{
+        try {
             const medicacao = await this.prisma.medicacao.findMany({
                 where: {
                     idosoId: id
@@ -68,18 +72,18 @@ export class MedicacaoService implements Crud {
             });
 
             return success(medicacao);
-        }catch (error) {
+        } catch (error) {
             console.error(error);
             return serviceError(error);
         }
     }
 
     async Update(data: MedicacaoDto, id: string): Promise<HttpResponse> {
-        try{
-            const {statusCode, body} = await this.Read(id);
+        try {
+            const { statusCode, body } = await this.Read(id);
 
-            if (statusCode == 200){
-                const { nome, modoAdm, descricao} = data; // Desestruturação dos elementos\
+            if (statusCode == 200) {
+                const { nome, modoAdm, descricao } = data; // Desestruturação dos elementos\
 
                 const medicaoAtulizado = await this.prisma.medicacao.update({
                     data: {
@@ -93,21 +97,21 @@ export class MedicacaoService implements Crud {
                 });
 
                 return success(medicaoAtulizado);
-            }else{
+            } else {
                 return badRequest();
             }
 
-        }catch (error) {
+        } catch (error) {
             console.error(error);
             return serviceError(error);
         }
     }
 
     async Delete(id: string): Promise<HttpResponse> {
-        try{
-            const {statusCode, body} = await this.Read(id);
+        try {
+            const { statusCode, body } = await this.Read(id);
 
-            if (statusCode == 200){
+            if (statusCode == 200) {
                 await this.prisma.medicacao.delete({
                     where: {
                         id
@@ -115,24 +119,24 @@ export class MedicacaoService implements Crud {
                 });
 
                 return noContent();
-            }else{
+            } else {
                 return badRequest();
             }
 
-        }catch (error) {
+        } catch (error) {
             console.error(error);
             return serviceError(error);
         }
     }
 
-    async aumentarEstoque(id: string, qtd: string): Promise<HttpResponse>{
-        try{
-            const {statusCode, body} = await this.Read(id);
+    async aumentarEstoque(id: string, qtd: string): Promise<HttpResponse> {
+        try {
+            const { statusCode, body } = await this.Read(id);
 
-            if (statusCode == 200){
+            if (statusCode == 200) {
                 const medicacao = new Medicacao(body.nome, body.modoAdm, body.descricao, body.idosoId, body.falhas, body.estoque);
                 medicacao.aumentarEstoque(parseInt(qtd));
-                
+
                 const medicaoAtulizado = await this.prisma.medicacao.update({
                     data: {
                         nome: medicacao.nome,
@@ -147,26 +151,26 @@ export class MedicacaoService implements Crud {
                 });
 
                 return success(medicaoAtulizado);
-            }else{
+            } else {
                 return badRequest();
             }
 
-        }catch (error) {
+        } catch (error) {
             console.error(error);
             return serviceError(error);
         }
     }
 
-    async diminuirEstoque(id: string, qtd: string): Promise<HttpResponse>{
-        try{
-            const {statusCode, body} = await this.Read(id);
+    async diminuirEstoque(id: string, qtd: string): Promise<HttpResponse> {
+        try {
+            const { statusCode, body } = await this.Read(id);
 
-            if (statusCode == 200){
+            if (statusCode == 200) {
                 const medicacao = new Medicacao(body.nome, body.modoAdm, body.descricao, body.idosoId, body.falhas, body.estoque);
-                
+
                 const respDominuir = medicacao.diminuirEstoque(parseInt(qtd));
 
-                if (respDominuir){
+                if (respDominuir) {
                     const medicaoAtulizado = await this.prisma.medicacao.update({
                         data: {
                             nome: medicacao.nome,
@@ -179,17 +183,32 @@ export class MedicacaoService implements Crud {
                             id
                         }
                     });
-    
+
+                    if (medicaoAtulizado.estoque < 10) {
+                        const infos = await this.notificacaoService.getInfosToSendNotification(body.idosoId);
+
+                        const onlyNotificationsInformations = {
+                            endpoint: infos.fcmUrl,
+                            expirationTime: null,
+                            keys: {
+                                p256dh: infos.token,
+                                auth: infos.auth
+                            }
+                        }
+
+                        this.webPush.sendNot(onlyNotificationsInformations, `O estoque da medicação ${medicaoAtulizado.nome} está baixo, providencie mais remédios\nEstoque: ${medicaoAtulizado.estoque}`)
+                    }
+
                     return success(medicaoAtulizado);
-                }else{
+                } else {
                     return notFound(`Não existe estoque para o medicamento ${body.nome}`);
                 }
-                
-            }else{
+
+            } else {
                 return badRequest();
             }
 
-        }catch (error) {
+        } catch (error) {
             console.error(error);
             return serviceError(error);
         }
