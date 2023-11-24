@@ -131,7 +131,12 @@ export class ConsultaService implements Crud {
                 where: { id }
             });
 
-            this.notificacaoService.deleteCronJob(`${consultaExiste.body.id}-${consultaExiste.body.especialidade}-${consultaExiste.body.medico}`)
+            try {
+                this.notificacaoService.deleteCronJob(`${consultaExiste.body.id}-${consultaExiste.body.especialidade}-${consultaExiste.body.medico}`);
+            } catch (error) {
+                console.log("Não possui job");
+                
+            }
 
             return noContent();
         } catch (error) {

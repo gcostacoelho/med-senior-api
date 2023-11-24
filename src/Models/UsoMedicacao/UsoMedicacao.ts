@@ -1,3 +1,4 @@
+import { cronPatternConsult, cronPatternUsoMedicacao } from 'src/utils/cronPatterns';
 import { Medicacao } from '../Medicacao/Medicacao';
 
 export class UsoMedicacao {
@@ -34,10 +35,46 @@ export class UsoMedicacao {
             if (horaProximoConsumo <= meiaNoiteAtual) {
                 this.tomar = horaProximoConsumo;
                 return true;
-            } else{
+            } else {
                 return false;
             }
         }
     }
 
+    public getCronsPatterns() {
+        let final = true;
+        let horasTomar = this.horaInicial;
+
+        const crons = []
+
+        while (final) {
+            if (horasTomar.getDate() == this.dataFinal.getUTCDate()) {
+                horasTomar = new Date(horasTomar.getTime() + this.intervalo * 60 * 60 * 1000);
+                const cronPattern = cronPatternUsoMedicacao(horasTomar);
+
+                // ! Only for presentation
+                console.log({
+                    'Date': horasTomar,
+                    'Cron': cronPattern
+                });
+
+                crons.push(cronPattern);
+                final = false;
+            } else {
+                const cronPattern = cronPatternUsoMedicacao(horasTomar);
+
+                // ! Only for presentation
+                console.log({
+                    'Date': horasTomar,
+                    'Cron': cronPattern
+                });
+
+                crons.push(cronPattern);
+
+                horasTomar = new Date(horasTomar.getTime() + this.intervalo * 60 * 60 * 1000);
+            }
+        }
+        
+        return crons;
+    }
 }

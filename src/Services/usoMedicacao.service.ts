@@ -20,7 +20,7 @@ export class UsoMedicacaoService implements Crud {
         try {
             const { dosagem, intervalo, horaInicial, dataFinal, medId, idosoId } = data; // Desestruturação dos elementos\
 
-            const UsoMedicacao = await this.prisma.usoMedicacao.create({
+            const usoMedicacao = await this.prisma.usoMedicacao.create({
                 data: {
                     dosagem,
                     intervalo,
@@ -31,13 +31,19 @@ export class UsoMedicacaoService implements Crud {
                 }
             });
 
-            const cronPattern = cronPatternUsoMedicacao(intervalo);
             const medicacao = await this.medicacao.Read(medId);
             const nomeMedicacao = medicacao.body.nome;
 
-            await this.notificacaoService.createCronJob(idosoId, cronPattern, `Está na hora de tomar a medicação ${nomeMedicacao}`, `idMed-${medId}`);
+            const usoMedicacaoClass = new UsoMedicacao(usoMedicacao.dosagem, usoMedicacao.intervalo, usoMedicacao.horaInicial, usoMedicacao.idosoId, usoMedicacao.dataFinal, medicacao.body);
 
-            return created(UsoMedicacao);
+            const cronsPatterns = usoMedicacaoClass.getCronsPatterns();
+
+            for (let i = 0; i < cronsPatterns.length; i++) {
+                const cron = cronsPatterns[i];
+                await this.notificacaoService.createCronJob(idosoId, cron, `Está na hora de tomar a medicação ${nomeMedicacao}`, `idMed-${medId}-${i}`);
+            }
+
+            return created(usoMedicacao);
         } catch (error) {
             console.error(error);
             return serviceError(error);
@@ -144,10 +150,13 @@ export class UsoMedicacaoService implements Crud {
                     }
                 });
 
-                console.log(body);
+                try {
+                    this.notificacaoService.deleteCronJob(`idMed-${body.medId}`);
+                } catch (error) {
+                    console.log("Não possui job");
+                    
+                }
                 
-                this.notificacaoService.deleteCronJob(`idMed-${body.medId}`);
-
                 return noContent();
             } else {
                 return badRequest();
