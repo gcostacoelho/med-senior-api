@@ -25,8 +25,11 @@ export class ConsultaService implements Crud {
             const cronPattern = cronPatternConsult(data.dataHoraConsulta);
 
             console.log(cronPattern);
-
-            await this.notificacaoService.createCronJob(data.idosoId, cronPattern, `Sua consulta médica com o Dr. ${consulta.medico} está agendada para hoje`, `${consulta.id}-${data.especialidade}-${data.medico}`);
+            try {
+                await this.notificacaoService.createCronJob(data.idosoId, cronPattern, `Sua consulta médica com o Dr. ${consulta.medico} está agendada para hoje`, `${consulta.id}-${data.especialidade}-${data.medico}`);
+            } catch (error) {
+                console.log(error);
+            }
 
             return created(consulta);
         } catch (error) {
