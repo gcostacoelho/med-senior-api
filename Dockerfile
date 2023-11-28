@@ -10,6 +10,8 @@ RUN npm install
 
 RUN npx prisma generate
 
+RUN apk add tzdata && ln -s /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime
+
 EXPOSE 5000
 
 COPY . .
