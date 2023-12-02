@@ -1,0 +1,882 @@
+openapi: 3.0.0
+paths:
+  /sintoma:
+    post:
+      operationId: SintomaController_novoSintoma
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SintomaDto"
+      responses:
+        "201":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SintomaDto"
+        "400": &ref_0
+          description: Informacão ou informações inválidas, por favor verifique
+        "401": &ref_1
+          description: Não autorizado
+        "500": &ref_2
+          description: Erro no servidor
+      tags: &ref_3
+        - Sintoma
+      security: &ref_4
+        - bearer: []
+  /sintoma/{usuarioId}:
+    get:
+      operationId: SintomaController_lerSintomas
+      parameters:
+        - name: usuarioId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SintomaDto"
+        "400": *ref_0
+        "401": *ref_1
+        "500": *ref_2
+      tags: *ref_3
+      security: *ref_4
+    put:
+      operationId: SintomaController_atualizarSintoma
+      parameters:
+        - name: usuarioId
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SintomaDto"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SintomaDto"
+        "400": *ref_0
+        "401": *ref_1
+        "500": *ref_2
+      tags: *ref_3
+      security: *ref_4
+    delete:
+      operationId: SintomaController_deletarSintoma
+      parameters:
+        - name: usuarioId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "204":
+          description: No content
+        "400": *ref_0
+        "401": *ref_1
+        "500": *ref_2
+      tags: *ref_3
+      security: *ref_4
+  /consulta:
+    post:
+      operationId: ConsultaController_novaConsulta
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ConsultaDto"
+      responses:
+        "201":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConsultaDto"
+        "400": &ref_5
+          description: Informacão ou informações inválidas, por favor verifique
+        "401": &ref_6
+          description: Não autorizado
+        "500": &ref_7
+          description: Erro no servidor
+      tags: &ref_8
+        - Consulta
+      security: &ref_9
+        - bearer: []
+  /consulta/{usuarioId}:
+    get:
+      operationId: ConsultaController_lerConsultas
+      parameters:
+        - name: usuarioId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ConsultaDto"
+        "400": *ref_5
+        "401": *ref_6
+        "500": *ref_7
+      tags: *ref_8
+      security: *ref_9
+  /consulta/{consultaId}:
+    get:
+      operationId: ConsultaController_lerConsultaEspecifica
+      parameters:
+        - name: consultaId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConsultaDto"
+        "400": *ref_5
+        "401": *ref_6
+        "500": *ref_7
+      tags: *ref_8
+      security: *ref_9
+    put:
+      operationId: ConsultaController_atualizarConsulta
+      parameters:
+        - name: consultaId
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ConsultaDto"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConsultaDto"
+        "400": *ref_5
+        "401": *ref_6
+        "500": *ref_7
+      tags: *ref_8
+      security: *ref_9
+    delete:
+      operationId: ConsultaController_deletarConsulta
+      parameters:
+        - name: consultaId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "204":
+          description: No content
+        "400": *ref_5
+        "401": *ref_6
+        "500": *ref_7
+      tags: *ref_8
+      security: *ref_9
+  /medicacao:
+    post:
+      operationId: MedicacaoController_novaMedicacao
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MedicacaoDto"
+      responses:
+        "201":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MedicacaoDto"
+        "400": &ref_10
+          description: Informacão ou informações inválidas, por favor verifique
+        "401": &ref_11
+          description: Não autorizado
+        "500": &ref_12
+          description: Erro no servidor
+      tags: &ref_13
+        - Medicacao
+      security: &ref_14
+        - bearer: []
+  /medicacao/todos/{usuarioId}:
+    get:
+      operationId: MedicacaoController_lerTodasMedicacoes
+      parameters:
+        - name: usuarioId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MedicacaoDto"
+        "400": *ref_10
+        "401": *ref_11
+        "500": *ref_12
+      tags: *ref_13
+      security: *ref_14
+  /medicacao/{medicacaoId}:
+    get:
+      operationId: MedicacaoController_lerMedicacao
+      parameters:
+        - name: medicacaoId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MedicacaoDto"
+        "400": *ref_10
+        "401": *ref_11
+        "500": *ref_12
+      tags: *ref_13
+      security: *ref_14
+    put:
+      operationId: MedicacaoController_atualizarMedicacao
+      parameters:
+        - name: medicacaoId
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MedicacaoDto"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MedicacaoDto"
+        "400": *ref_10
+        "401": *ref_11
+        "500": *ref_12
+      tags: *ref_13
+      security: *ref_14
+    delete:
+      operationId: MedicacaoController_deletarMedicacao
+      parameters:
+        - name: medicacaoId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "204":
+          description: No content
+        "400": *ref_10
+        "401": *ref_11
+        "500": *ref_12
+      tags: *ref_13
+      security: *ref_14
+  /medicacao/{medicacaoId}/{qtdMedicacao}:
+    patch:
+      operationId: MedicacaoController_aumentarEstoque
+      parameters:
+        - name: medicacaoId
+          required: true
+          in: path
+          schema:
+            type: string
+        - name: qtdMedicacao
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MedicacaoDto"
+        "400": *ref_10
+        "401": *ref_11
+        "500": *ref_12
+      tags: *ref_13
+      security: *ref_14
+  /medicacao/uso:
+    post:
+      operationId: MedicacaoController_novoUsoMed
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UsoMedicacaoDto"
+      responses:
+        "201":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UsoMedicacaoDto"
+        "400": *ref_10
+        "401": *ref_11
+        "500": *ref_12
+      tags: *ref_13
+      security: *ref_14
+  /medicacao/uso/{idUso}:
+    get:
+      operationId: MedicacaoController_usoMed
+      parameters:
+        - name: idUso
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UsoMedicacaoResponseDto"
+        "400": *ref_10
+        "401": *ref_11
+        "500": *ref_12
+      tags: *ref_13
+      security: *ref_14
+    put:
+      operationId: MedicacaoController_atualizarUSoMedicamento
+      parameters:
+        - name: idUso
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UsoMedicacaoDto"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UsoMedicacaoDto"
+        "400": *ref_10
+        "401": *ref_11
+        "500": *ref_12
+      tags: *ref_13
+      security: *ref_14
+    delete:
+      operationId: MedicacaoController_apagarUso
+      parameters:
+        - name: idUso
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "204":
+          description: No Content
+        "400": *ref_10
+        "401": *ref_11
+        "500": *ref_12
+      tags: *ref_13
+      security: *ref_14
+  /medicacao/uso/todos/{idosoCodigo}:
+    get:
+      operationId: MedicacaoController_todosUsoMed
+      parameters:
+        - name: idosoCodigo
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UsoMedicacaoResponseDto"
+        "400": *ref_10
+        "401": *ref_11
+        "500": *ref_12
+      tags: *ref_13
+      security: *ref_14
+  /medicacao/uso/{idUso}/{qtd}:
+    patch:
+      operationId: MedicacaoController_tomarRemedio
+      parameters:
+        - name: idUso
+          required: true
+          in: path
+          schema:
+            type: string
+        - name: qtd
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MedicacaoDto"
+        "400": *ref_10
+        "401": *ref_11
+        "500": *ref_12
+      tags: *ref_13
+      security: *ref_14
+  /idoso:
+    post:
+      operationId: IdosoController_novoIdoso
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/IdosoDto"
+      responses:
+        "201":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IdosoDtoWithoutPass"
+        "400": &ref_15
+          description: Informacão ou informações inválidas, por favor verifique
+        "401": &ref_16
+          description: Não autorizado
+        "500": &ref_17
+          description: Erro no servidor
+      tags: &ref_18
+        - Idoso
+      security: &ref_19
+        - bearer: []
+  /idoso/{email}:
+    get:
+      operationId: IdosoController_lerIdoso
+      parameters:
+        - name: email
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IdosoDtoWithoutPass"
+        "400": *ref_15
+        "401": *ref_16
+        "500": *ref_17
+      tags: *ref_18
+      security: *ref_19
+    put:
+      operationId: IdosoController_atualizarIdoso
+      parameters:
+        - name: email
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/IdosoDtoWithoutPass"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IdosoDtoWithoutPass"
+        "400": *ref_15
+        "401": *ref_16
+        "500": *ref_17
+      tags: *ref_18
+      security: *ref_19
+    delete:
+      operationId: IdosoController_deletarIdoso
+      parameters:
+        - name: email
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "204":
+          description: No Content
+        "400": *ref_15
+        "401": *ref_16
+        "500": *ref_17
+      tags: *ref_18
+      security: *ref_19
+  /cuidador:
+    post:
+      operationId: CuidadorController_novoCuidador
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CuidadorDto"
+      responses:
+        "201":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CuidadorDtoWithoutPass"
+        "400": &ref_20
+          description: Informacão ou informações inválidas, por favor verifique
+        "401": &ref_21
+          description: Não autorizado
+        "500": &ref_22
+          description: Erro no servidor
+      tags: &ref_23
+        - Cuidador
+      security: &ref_24
+        - bearer: []
+  /cuidador/{email}:
+    get:
+      operationId: CuidadorController_lerCuidador
+      parameters:
+        - name: email
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CuidadorDtoWithoutPass"
+        "400": *ref_20
+        "401": *ref_21
+        "500": *ref_22
+      tags: *ref_23
+      security: *ref_24
+    put:
+      operationId: CuidadorController_atualizarCuidador
+      parameters:
+        - name: email
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CuidadorDtoWithoutPass"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CuidadorDtoWithoutPass"
+        "400": *ref_20
+        "401": *ref_21
+        "500": *ref_22
+      tags: *ref_23
+      security: *ref_24
+    delete:
+      operationId: CuidadorController_deletarCuidador
+      parameters:
+        - name: email
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "204":
+          description: No content
+        "400": *ref_20
+        "401": *ref_21
+        "500": *ref_22
+      tags: *ref_23
+      security: *ref_24
+info:
+  title: MedSenior - API
+  description: MedSenior
+  version: 1.0.0
+  contact: {}
+tags:
+  - name: Cuidador
+    description: Endpoints para a criação das funcionalidades que envolvem o cuidador
+  - name: Idoso
+    description: Endpoints para a criação das funcionalidades que envolvem o idoso
+  - name: Medicacao
+    description: Endpoints para a criação das funcionalidades que envolvem os medicamentos
+  - name: Consulta
+    description: Endpoints para a criação das funcionalidades que envolvem as consultas
+  - name: Sintoma
+    description: Endpoints para a criação das funcionalidades que envolvem os sintomas
+servers: []
+components:
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http
+  schemas:
+    SintomaDto:
+      type: object
+      properties:
+        idosoId:
+          type: string
+        descricao:
+          type: string
+        ocorrencia:
+          type: array
+          items:
+            type: string
+      required:
+        - idosoId
+        - descricao
+        - ocorrencia
+    ConsultaDto:
+      type: object
+      properties:
+        dataHoraConsulta:
+          format: date-time
+          type: string
+        local:
+          type: string
+        especialidade:
+          type: string
+        medico:
+          type: string
+        documentos:
+          type: string
+      required:
+        - dataHoraConsulta
+        - local
+        - especialidade
+        - medico
+        - documentos
+    MedicacaoDto:
+      type: object
+      properties:
+        nome:
+          type: string
+        modoAdm:
+          type: string
+        descricao:
+          type: string
+        estoque:
+          type: number
+        falhas:
+          type: array
+          items:
+            type: string
+        idosoId:
+          type: string
+      required:
+        - nome
+        - modoAdm
+        - descricao
+        - estoque
+        - falhas
+        - idosoId
+    UsoMedicacaoDto:
+      type: object
+      properties:
+        dosagem:
+          type: number
+        intervalo:
+          type: number
+        horaInicial:
+          format: date-time
+          type: string
+        dataFinal:
+          format: date-time
+          type: string
+        idosoId:
+          type: string
+        medId:
+          type: string
+      required:
+        - dosagem
+        - intervalo
+        - horaInicial
+        - dataFinal
+        - idosoId
+        - medId
+    UsoMedicacaoResponseDto:
+      type: object
+      properties:
+        dosagem:
+          type: number
+        intervalo:
+          type: number
+        horaInicial:
+          format: date-time
+          type: string
+        dataFinal:
+          format: date-time
+          type: string
+        idosoId:
+          type: string
+        medId:
+          type: string
+        medicacao:
+          $ref: "#/components/schemas/MedicacaoDto"
+      required:
+        - dosagem
+        - intervalo
+        - horaInicial
+        - dataFinal
+        - idosoId
+        - medId
+        - medicacao
+    IdosoDto:
+      type: object
+      properties:
+        nome:
+          type: string
+        telefone:
+          type: string
+        dataNasc:
+          format: date-time
+          type: string
+        email:
+          type: string
+        senha:
+          type: string
+        doencas:
+          type: array
+          items:
+            type: string
+      required:
+        - nome
+        - telefone
+        - dataNasc
+        - email
+        - senha
+        - doencas
+    IdosoDtoWithoutPass:
+      type: object
+      properties:
+        nome:
+          type: string
+        telefone:
+          type: string
+        dataNasc:
+          format: date-time
+          type: string
+        email:
+          type: string
+        doencas:
+          type: array
+          items:
+            type: string
+      required:
+        - nome
+        - telefone
+        - dataNasc
+        - email
+        - doencas
+    CuidadorDto:
+      type: object
+      properties:
+        nome:
+          type: string
+        telefone:
+          type: string
+        dataNasc:
+          format: date-time
+          type: string
+        codigoIdoso:
+          type: string
+        email:
+          type: string
+        senha:
+          type: string
+      required:
+        - nome
+        - telefone
+        - dataNasc
+        - codigoIdoso
+        - email
+        - senha
+    CuidadorDtoWithoutPass:
+      type: object
+      properties:
+        nome:
+          type: string
+        telefone:
+          type: string
+        dataNasc:
+          format: date-time
+          type: string
+        codigoIdoso:
+          type: string
+        email:
+          type: string
+      required:
+        - nome
+        - telefone
+        - dataNasc
+        - codigoIdoso
+        - email
